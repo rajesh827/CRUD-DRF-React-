@@ -22,3 +22,22 @@ class GroceryListAPIView(APIView):
                 'data': serializer.data
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class GroceryDetailAPIView(APIView):
+    """Get, update or delete a grocery item"""
+
+    def get_object(self, pk):
+        try:
+            return GroceryItem.objects.get(pk=pk)
+        except GroceryItem.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        item = self.get_object(pk)
+        if not item:
+            return Response(
+                {'error': 'Item not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serializer = GroceryItemSerializer(item)
+        return Response(serializer.data)
