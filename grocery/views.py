@@ -12,3 +12,13 @@ class GroceryListAPIView(APIView):
         items = GroceryItem.objects.all()
         serializer = GroceryItemSerializer(items, many=True)
         return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = GroceryItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'message': 'Item added successfully!',
+                'data': serializer.data
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
