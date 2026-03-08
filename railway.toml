@@ -1,0 +1,12 @@
+[build]
+builder = "NIXPACKS"
+
+[build.nixpacks]
+setup = "cd frontend && npm install"
+build = "cd frontend && npm run build"
+
+[deploy]
+startCommand = "python manage.py migrate && gunicorn crud.wsgi --bind 0.0.0.0:$PORT"
+
+[databases]
+database = "postgresql"
