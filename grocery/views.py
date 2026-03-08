@@ -75,3 +75,16 @@ class GroceryDetailAPIView(APIView):
                 'data': serializer.data
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk):
+        item = self.get_object(pk)
+        if not item:
+            return Response(
+                {'error': 'Item not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        item.delete()
+        return Response(
+            {'message': 'Item deleted successfully!'},
+            status=status.HTTP_204_NO_CONTENT
+        )
