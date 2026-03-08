@@ -58,3 +58,20 @@ class GroceryDetailAPIView(APIView):
                 'data': serializer.data
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def patch(self, request, pk):
+        """Partial update - can be used for toggling completed status"""
+        item = self.get_object(pk)
+        if not item:
+            return Response(
+                {'error': 'Item not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serializer = GroceryItemSerializer(item, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'message': 'Item updated successfully!',
+                'data': serializer.data
+            })
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
