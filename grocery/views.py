@@ -41,3 +41,20 @@ class GroceryDetailAPIView(APIView):
             )
         serializer = GroceryItemSerializer(item)
         return Response(serializer.data)
+    
+    def put(self, request, pk):
+        """Full update"""
+        item = self.get_object(pk)
+        if not item:
+            return Response(
+                {'error': 'Item not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serializer = GroceryItemSerializer(item, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'message': 'Item updated successfully!',
+                'data': serializer.data
+            })
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
