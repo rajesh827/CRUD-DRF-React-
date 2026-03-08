@@ -6,7 +6,7 @@ import "./App.css";
 import { nanoid } from "nanoid";
 import Form from "./components/Form";
 
-const BASE_URL = "/api/grocery";
+const BASE_URL = "https://web-production-55e60.up.railway.app/api/grocery";
 
 const App = () => {
   const [items, setItems] = useState([]);
