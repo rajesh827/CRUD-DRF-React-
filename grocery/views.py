@@ -88,3 +88,22 @@ class GroceryDetailAPIView(APIView):
             {'message': 'Item deleted successfully!'},
             status=status.HTTP_204_NO_CONTENT
         )
+        
+class GroceryToggleAPIView(APIView):
+    """Toggle completed status of a grocery item"""
+
+    def post(self, request, pk):
+        try:
+            item = GroceryItem.objects.get(pk=pk)
+            item.completed = not item.completed
+            item.save()
+            serializer = GroceryItemSerializer(item)
+            return Response({
+                'message': 'Item toggled successfully!',
+                'data': serializer.data
+            })
+        except GroceryItem.DoesNotExist:
+            return Response(
+                {'error': 'Item not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
